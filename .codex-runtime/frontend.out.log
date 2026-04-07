@@ -1,0 +1,97 @@
+
+> mapofmath-frontend@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3000
+
+  ▲ Next.js 14.2.5
+  - Local:        http://127.0.0.1:3000
+  - Network:      http://127.0.0.1:3000
+  - Experiments (use with caution):
+    · typedRoutes
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 12.2s
+ ○ Compiling / ...
+ GET / 200 in 8550ms
+ GET / 200 in 54ms
+ GET / 200 in 54ms
+ ✓ Compiled / in 6s (481 modules)
+ ✓ Compiled in 222ms (462 modules)
+ ✓ Compiled in 1405ms (462 modules)
+ ✓ Compiled in 400ms (476 modules)
+ ✓ Compiled in 231ms (476 modules)
+ ✓ Compiled in 185ms (476 modules)
+ ✓ Compiled in 170ms (476 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1378ms (465 modules)
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 2.7s (689 modules)
+ GET / 404 in 4424ms
+ GET / 200 in 217ms
+ GET / 200 in 48ms
+ GET / 200 in 35ms
+ GET / 200 in 41ms
+ ✓ Compiled in 836ms (686 modules)
+ ✓ Compiled /_not-found in 197ms (689 modules)
+ GET /_next/static/webpack/4e783688e5305a05.webpack.hot-update.json 404 in 360ms
+ GET / 200 in 74ms
+ ✓ Compiled in 481ms (689 modules)
+ ✓ Compiled in 408ms (689 modules)
+ ✓ Compiled in 330ms (703 modules)
+ GET / 200 in 86ms
+ GET / 200 in 86ms
+ GET / 200 in 63ms
+ ✓ Compiled in 334ms (686 modules)
+ ✓ Compiled in 5.1s (1270 modules)
+ ✓ Compiled in 468ms (1270 modules)
+ ✓ Compiled in 400ms (1270 modules)
+ ✓ Compiled in 396ms (1284 modules)
+ ✓ Compiled in 500ms (1270 modules)
+ GET / 200 in 295ms
+ GET / 200 in 74ms
+ GET / 200 in 65ms
+ GET / 200 in 63ms
+ ✓ Compiled in 1389ms (1270 modules)
+ ✓ Compiled in 298ms (1272 modules)
+ ✓ Compiled in 337ms (1272 modules)
+ ✓ Compiled in 282ms (1272 modules)
+ ✓ Compiled in 318ms (1272 modules)
+ ✓ Compiled in 387ms (1272 modules)
+ ✓ Compiled in 262ms (1272 modules)
+ ✓ Compiled in 318ms (1272 modules)
+ ✓ Compiled in 276ms (1272 modules)
+ ✓ Compiled in 374ms (1272 modules)
+ ✓ Compiled in 569ms (1312 modules)
+ ✓ Compiled in 314ms (1312 modules)
+ ✓ Compiled in 215ms (1312 modules)
+ ✓ Compiled in 270ms (1312 modules)
+ ✓ Compiled in 520ms (1314 modules)
+ ✓ Compiled in 271ms (1314 modules)
+ ✓ Compiled in 231ms (1314 modules)
+ ✓ Compiled in 391ms (1314 modules)
+ ✓ Compiled in 261ms (1314 modules)
+ ✓ Compiled in 412ms (1328 modules)
+ ✓ Compiled in 343ms (1328 modules)
+ GET / 200 in 188ms
+ ○ Compiling /wiki/[slug] ...
+ ✓ Compiled /wiki/[slug] in 2.3s (1590 modules)
+ GET /wiki/integral 500 in 147ms
+ GET / 500 in 43ms
+ GET /wiki/integral 500 in 202ms
+ GET / 500 in 48ms
+ GET / 500 in 56ms
+ GET / 500 in 32ms
+ GET / 500 in 93ms
+ GET / 500 in 50ms
+ GET / 500 in 48ms
+ GET / 500 in 76ms
+ GET / 500 in 36ms
+ GET / 500 in 40ms
+ GET / 500 in 37ms
+ GET / 500 in 54ms
+ GET / 500 in 56ms
+ GET / 500 in 38ms

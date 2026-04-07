@@ -1,0 +1,1185 @@
+:root {
+  --bg: #f8f9fa;
+  --panel: #ffffff;
+  --panel-strong: #f8f9fa;
+  --ink: #202122;
+  --muted: #54595d;
+  --line: #c8ccd1;
+  --accent: #3366bb;
+  --link-hover: #447ff5;
+  --concept: #2a6f5e;
+  --theorem: #a63d4a;
+  --mathematician: #2f5d9f;
+  --area: #6b4f1d;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: var(--font-serif), "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--link-hover);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell,
+.standalone-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 24px 48px;
+  box-sizing: border-box;
+}
+
+.site-header {
+  padding: 12px 0 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-title {
+  margin: 0;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.section-heading h2,
+.detail-card h2 {
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.main-column {
+  display: grid;
+  gap: 20px;
+}
+
+.section-panel,
+.detail-card {
+  padding: 24px;
+}
+
+.section-heading {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section-heading h2,
+.detail-card h2 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 2vw, 2.1rem);
+}
+
+.section-heading p,
+.detail-card p,
+.timeline-item p,
+.search-result p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.search-toolbar {
+  display: grid;
+  grid-template-columns: 2fr repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.search-toolbar label {
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.search-toolbar input,
+.search-toolbar select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--ink);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+}
+
+.search-results {
+  display: grid;
+  gap: 12px;
+}
+
+.search-helper-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+  color: var(--muted);
+}
+
+.search-helper-row p {
+  margin: 0;
+}
+
+.secondary-button {
+  padding: 10px 14px;
+  border: 1px solid rgba(31, 36, 48, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  border-color: rgba(192, 138, 43, 0.45);
+}
+
+.search-result,
+.timeline-item {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  text-align: left;
+  cursor: pointer;
+  transition: box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.search-result:hover,
+.timeline-item:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.search-result h3,
+.timeline-item h3 {
+  margin: 10px 0 8px;
+  font-size: 1.08rem;
+}
+
+.result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.type-pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.type-concept {
+  background: rgba(31, 122, 99, 0.12);
+  color: var(--concept);
+}
+
+.type-theorem {
+  background: rgba(209, 73, 91, 0.12);
+  color: var(--theorem);
+}
+
+.type-mathematician {
+  background: rgba(47, 93, 159, 0.12);
+  color: var(--mathematician);
+}
+
+.graph-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+}
+
+.graph-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.graph-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.graph-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.graph-control-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.graph-control-group label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.graph-control-group select {
+  min-width: 136px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--ink);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+}
+
+.graph-toggles {
+  justify-content: flex-end;
+}
+
+.graph-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+}
+
+.secondary-button.is-active {
+  border-color: rgba(51, 102, 187, 0.35);
+  background: rgba(51, 102, 187, 0.08);
+}
+
+.relation-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.relation-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+}
+
+.relation-chip i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.relation-chip.is-active {
+  color: var(--ink);
+  border-color: rgba(51, 102, 187, 0.35);
+  background: rgba(51, 102, 187, 0.08);
+}
+
+.cytoscape-shell {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  overflow: hidden;
+}
+
+.cytoscape-canvas {
+  width: 100%;
+  height: min(56vh, 620px);
+}
+
+.graph-canvas {
+  width: 100%;
+  min-height: min(52vh, 560px);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid var(--line);
+}
+
+.edge {
+  stroke: rgba(31, 36, 48, 0.16);
+  stroke-width: 1.5;
+}
+
+.graph-node {
+  cursor: pointer;
+}
+
+.graph-node text {
+  fill: var(--ink);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.75rem;
+}
+
+.graph-node-area {
+  cursor: default;
+}
+
+.graph-node-area circle {
+  opacity: 0.7;
+}
+
+.timeline {
+  display: grid;
+  gap: 18px;
+}
+
+.timeline-group {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.timeline-year {
+  position: sticky;
+  top: 18px;
+  padding: 12px 10px;
+  border-radius: 10px;
+  background: #eaf3ff;
+  color: var(--accent);
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid #c8d9f0;
+}
+
+.timeline-items {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-card {
+  background: var(--panel);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.metadata-grid > div {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.metadata-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.detail-summary {
+  margin-bottom: 18px;
+  font-size: 1.02rem;
+}
+
+.markdown-body {
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.markdown-body p,
+.markdown-body ul {
+  margin-top: 0;
+}
+
+.plain-list,
+.connection-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.connection-list li {
+  display: grid;
+  grid-template-columns: 14px 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.type-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-concept {
+  background: var(--concept);
+}
+
+.dot-theorem {
+  background: var(--theorem);
+}
+
+.dot-mathematician {
+  background: var(--mathematician);
+}
+
+.empty-state,
+.error-banner,
+.standalone-header {
+  padding: 18px;
+}
+
+.empty-state {
+  border: 1px dashed rgba(31, 36, 48, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.error-banner {
+  margin-bottom: 24px;
+  border-left: 4px solid var(--theorem);
+}
+
+.standalone-header {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 760px) {
+  .app-shell,
+  .standalone-page {
+    padding: 0 16px 40px;
+  }
+
+  .section-panel,
+  .detail-card {
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .section-heading,
+  .timeline-group,
+  .search-toolbar,
+  .metadata-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-canvas {
+    min-height: 340px;
+  }
+
+  .search-helper-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .graph-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .graph-toggles {
+    justify-content: space-between;
+  }
+
+  .cytoscape-canvas {
+    height: 420px;
+  }
+
+  .connection-list li {
+    grid-template-columns: 14px 1fr;
+  }
+
+  .wiki-article-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-toc {
+    position: static;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 8px;
+  }
+
+  .home-search-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Homepage (dark, Grokipedia-inspired) ——— */
+
+.home-root {
+  min-height: 100vh;
+  background: #000000;
+  color: #e8eaed;
+  padding: 0 clamp(16px, 4vw, 32px) 56px;
+}
+
+.home-root a {
+  color: #9db7ff;
+}
+
+.home-root a:hover {
+  color: #c5d4ff;
+}
+
+.home-hero {
+  position: relative;
+  padding: clamp(40px, 10vh, 88px) 16px 36px;
+  text-align: center;
+}
+
+.home-starfield {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: #000000;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 22% 38%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1.5px 1.5px at 41% 18%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 55% 62%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 71% 28%, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(1px 1px at 88% 44%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 15% 72%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 33% 88%, rgba(255, 255, 255, 0.38), transparent),
+    radial-gradient(1px 1px at 62% 8%, rgba(255, 255, 255, 0.42), transparent),
+    radial-gradient(1px 1px at 95% 78%, rgba(255, 255, 255, 0.48), transparent),
+    radial-gradient(1px 1px at 48% 51%, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0.95;
+}
+
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.home-brand {
+  margin: 0 0 28px;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.home-brand-serif {
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+  font-size: clamp(1.75rem, 4.5vw, 2.35rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.home-brand-version {
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #8b9099;
+}
+
+.home-search-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.home-search-pill:focus-within {
+  border-color: rgba(107, 154, 255, 0.45);
+}
+
+.home-search-icon {
+  display: flex;
+  color: #8b9099;
+  flex-shrink: 0;
+}
+
+.home-search-pill input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: #f0f2f5;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.9375rem;
+  outline: none;
+}
+
+.home-search-pill input::placeholder {
+  color: #6b7078;
+}
+
+.home-search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #2a2a2a;
+  color: #e8eaed;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.home-search-submit:hover {
+  background: #3a3a3a;
+}
+
+.home-explore-links {
+  margin-top: 22px;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.home-explore-links a {
+  color: #cfd4dc;
+  text-decoration: none;
+}
+
+.home-explore-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.home-explore-dot {
+  margin: 0 10px;
+  color: #5c6068;
+}
+
+.home-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.home-panel {
+  background: #101010;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  color: #e8eaed;
+}
+
+.home-section-heading h2 {
+  color: #f3f4f6;
+}
+
+.home-section-heading p {
+  color: #a8adb5;
+}
+
+.home-root .eyebrow {
+  color: #7ea3ff;
+}
+
+.home-search-toolbar {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.home-root .search-toolbar label {
+  color: #a8adb5;
+}
+
+.home-root .search-toolbar input,
+.home-root .search-toolbar select {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e8eaed;
+}
+
+.home-root .search-helper-row {
+  color: #8b9099;
+}
+
+.home-root .secondary-button {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e8eaed;
+}
+
+.home-root .secondary-button:hover {
+  border-color: rgba(107, 154, 255, 0.45);
+}
+
+.home-root .search-result-link,
+.home-root .timeline-item-link {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.home-root .search-result-link:hover,
+.home-root .timeline-item-link:hover {
+  color: inherit;
+  text-decoration: none;
+  border-color: rgba(107, 154, 255, 0.45);
+  background: #161616;
+}
+
+.home-root .search-result h3,
+.home-root .timeline-item h3 {
+  color: #f3f4f6;
+}
+
+.home-root .search-result p,
+.home-root .timeline-item p,
+.home-root .timeline-item small {
+  color: #a8adb5;
+}
+
+.home-root .type-pill.type-concept {
+  background: rgba(31, 122, 99, 0.22);
+  color: #7dd3be;
+}
+
+.home-root .type-pill.type-theorem {
+  background: rgba(209, 73, 91, 0.2);
+  color: #f0a8b2;
+}
+
+.home-root .type-pill.type-mathematician {
+  background: rgba(47, 93, 159, 0.22);
+  color: #9ec0f2;
+}
+
+.home-root .empty-state {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: #a8adb5;
+}
+
+.home-error-banner {
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  background: #1f1215;
+  border: 1px solid rgba(209, 73, 91, 0.35);
+  color: #f0a8b2;
+}
+
+.home-root .graph-control-group select {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #e8eaed;
+}
+
+.home-root .graph-stats {
+  color: #a8adb5;
+}
+
+.home-root .relation-chip {
+  background: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #a8adb5;
+}
+
+.home-root .relation-chip.is-active {
+  color: #e8eaed;
+}
+
+.home-cytoscape-shell {
+  background: #0a0a0a;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.home-root .timeline-year {
+  background: rgba(51, 102, 187, 0.15);
+  color: #9db7ff;
+  border-color: rgba(107, 154, 255, 0.25);
+}
+
+.home-footer {
+  max-width: 1100px;
+  margin: 48px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+}
+
+.home-footer-count-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #6b7078;
+  margin-bottom: 6px;
+}
+
+.home-footer-count-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.home-footer-legal {
+  margin: 20px 0 0;
+  font-size: 0.75rem;
+  color: #6b7078;
+}
+
+.home-footer-legal a {
+  color: #8b9099;
+}
+
+.home-footer-legal a:hover {
+  color: #cfd4dc;
+}
+
+/* ——— Wiki article (light, readable) ——— */
+
+.wiki-layout {
+  min-height: 100vh;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.wiki-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px clamp(16px, 4vw, 28px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.wiki-topbar-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.wiki-topbar-brand:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.wiki-topbar-serif {
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.wiki-topbar-version {
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.wiki-topbar-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.wiki-topbar-pill:hover {
+  border-color: rgba(51, 102, 187, 0.35);
+  background: #f8f9fa;
+  text-decoration: none;
+}
+
+.wiki-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px clamp(16px, 4vw, 40px) 80px;
+}
+
+.wiki-article-status {
+  margin: 0 0 12px;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.wiki-article-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.wiki-article-title {
+  margin: 0;
+  flex: 1;
+  min-width: min(100%, 280px);
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+  font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.wiki-article-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.wiki-toc {
+  position: sticky;
+  top: 72px;
+  padding-right: 8px;
+}
+
+.wiki-toc-label {
+  margin: 0 0 12px;
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.wiki-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wiki-toc-item a {
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.wiki-toc-item a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.wiki-toc-level-3 {
+  padding-left: 12px;
+}
+
+.wiki-article-main {
+  min-width: 0;
+}
+
+.wiki-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 24px;
+}
+
+.wiki-metadata-grid > div {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  border: 1px solid var(--line);
+}
+
+.wiki-lead {
+  margin: 0 0 24px;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: #3d4449;
+}
+
+.wiki-markdown.markdown-body {
+  padding: 0;
+  margin: 0 0 32px;
+  border-radius: 0;
+  background: transparent;
+}
+
+.wiki-markdown.markdown-body h2,
+.wiki-markdown.markdown-body h3 {
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+  scroll-margin-top: 88px;
+}
+
+.wiki-markdown.markdown-body h2 {
+  font-size: 1.5rem;
+  margin: 1.6em 0 0.6em;
+}
+
+.wiki-markdown.markdown-body h3 {
+  font-size: 1.2rem;
+  margin: 1.4em 0 0.5em;
+}
+
+.wiki-markdown.markdown-body p {
+  margin: 0 0 1em;
+}
+
+.wiki-markdown.markdown-body a {
+  color: #3366cc;
+}
+
+.wiki-markdown.markdown-body a:hover {
+  color: #447ff5;
+}
+
+.wiki-section h2 {
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+  font-size: 1.4rem;
+  margin: 0 0 14px;
+  scroll-margin-top: 88px;
+}
+
+.wiki-ref-list a {
+  color: #3366cc;
+}
+
+.wiki-connection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wiki-connection-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  border: 1px solid var(--line);
+}
+
+.wiki-connection-list a {
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+  min-width: 140px;
+}
+
+.wiki-connection-list a:hover {
+  color: var(--accent);
+}
+
+.wiki-connection-meta {
+  font-family: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
