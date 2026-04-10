@@ -1,13 +1,19 @@
 "use client";
 
-import { useDeferredValue, useEffect, useState } from "react";
+import type { Route } from "next";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { getGraph, getTimeline, searchEntries } from "@/lib/api";
-import { GraphPayload, QueryFilters, SearchResult, TimelineGroup } from "@/lib/types";
-import { HomeHero } from "@/components/HomeHero";
-import { KnowledgeGraph } from "@/components/KnowledgeGraph";
-import { SearchPanel } from "@/components/SearchPanel";
-import { TimelinePanel } from "@/components/TimelinePanel";
+import { getGraph, getTimeline } from "@/lib/api";
+import { buildExplorerQueryString } from "@/lib/query-state";
+import { readSessionSelection } from "@/lib/session-selection";
+import { flattenTimelineGroups } from "@/lib/timeline";
+import { GraphPayload, QueryFilters, TimelineGroup } from "@/lib/types";
+import { GraphCanvas } from "@/components/GraphCanvas";
+import { HorizontalTimeline } from "@/components/HorizontalTimeline";
+import { SearchControls } from "@/components/SearchControls";
+import { TopNavigation } from "@/components/TopNavigation";
 
 const defaultFilters: QueryFilters = {
   type: "",
@@ -17,133 +23,181 @@ const defaultFilters: QueryFilters = {
 };
 
 export function MapExplorer() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<QueryFilters>(defaultFilters);
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [selectedCenterId, setSelectedCenterId] = useState<string | null>(null);
-  const [graphDepth, setGraphDepth] = useState(2);
-  const [graph, setGraph] = useState<GraphPayload | null>(null);
+  const [previewGraph, setPreviewGraph] = useState<GraphPayload | null>(null);
   const [timeline, setTimeline] = useState<TimelineGroup[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const deferredQuery = useDeferredValue(query);
+  const [selectedCenterId, setSelectedCenterId] = useState<string | null>(null);
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const selection = readSessionSelection();
+    if (selection) {
+      setSelectedCenterId(selection.id);
+      setSelectedSlug(selection.slug);
+    }
+  }, []);
 
   useEffect(() => {
     let active = true;
-    setError(null);
-    searchEntries(deferredQuery, filters)
+    getGraph(selectedCenterId, 1, "", { limit: 10 })
       .then((payload) => {
         if (active) {
-          setResults(payload);
-          setError(null);
+          setPreviewGraph(payload);
         }
       })
-      .catch((err: Error) => {
+      .catch(() => {
         if (active) {
-          setError(err.message);
+          setPreviewGraph(null);
         }
       });
+
     return () => {
       active = false;
     };
-  }, [deferredQuery, filters]);
+  }, [selectedCenterId]);
 
   useEffect(() => {
     let active = true;
-    setError(null);
-    getGraph(selectedCenterId, graphDepth, filters.area)
-      .then((payload) => {
-        if (active) {
-          setGraph(payload);
-          setError(null);
-        }
-      })
-      .catch((err: Error) => {
-        if (active) {
-          setError(err.message);
-        }
-      });
-    return () => {
-      active = false;
-    };
-  }, [selectedCenterId, graphDepth, filters.area]);
-
-  useEffect(() => {
-    let active = true;
-    setError(null);
-    getTimeline(filters)
+    getTimeline(defaultFilters)
       .then((payload) => {
         if (active) {
           setTimeline(payload);
-          setError(null);
         }
       })
-      .catch((err: Error) => {
+      .catch(() => {
         if (active) {
-          setError(err.message);
+          setTimeline([]);
         }
       });
+
     return () => {
       active = false;
     };
-  }, [filters]);
+  }, []);
 
-  useEffect(() => {
-    if (results.length > 0 && selectedCenterId === null) {
-      setSelectedCenterId(results[0].id);
+  const previewTimelineItems = useMemo(() => {
+    const items = flattenTimelineGroups(timeline);
+    if (items.length === 0) {
+      return [];
     }
-  }, [results, selectedCenterId]);
+    if (!selectedSlug) {
+      return items.slice(0, 12);
+    }
+
+    const index = items.findIndex((item) => item.slug === selectedSlug);
+    if (index === -1) {
+      return items.slice(0, 12);
+    }
+
+    return items.slice(Math.max(0, index - 5), index + 7);
+  }, [selectedSlug, timeline]);
 
   const handleFilterChange = (key: keyof QueryFilters, value: string) => {
-    setFilters((current) => ({ ...current, [key]: value } as QueryFilters));
+    setFilters((current) => ({ ...current, [key]: value }));
   };
 
-  const handleResetFilters = () => {
+  const handleReset = () => {
     setQuery("");
     setFilters(defaultFilters);
-    setError(null);
   };
 
+  const searchHref = `/search${buildExplorerQueryString({ query, filters })}`;
+  const graphHref = `/graph${buildExplorerQueryString({
+    query: "",
+    filters: defaultFilters,
+    center: selectedCenterId,
+  })}`;
+  const timelineHref = `/timeline${buildExplorerQueryString({
+    query: "",
+    filters: defaultFilters,
+    target: selectedSlug,
+  })}`;
+
   return (
-    <div className="app-shell home-root">
-      <HomeHero query={query} onQueryChange={setQuery} />
+    <div className="site-shell">
+      <TopNavigation />
 
-      {error ? (
-        <div className="panel error-banner home-error-banner">
-          <p>{error}</p>
-        </div>
-      ) : null}
+      <main className="home-page">
+        <section className="home-section home-search-section">
+          <div className="home-section-copy">
+            <p className="eyebrow">Search-first navigation</p>
+            <h1>Navigate the map through a single search tab.</h1>
+            <p>
+              Start with a concept, theorem, or mathematician. The homepage stays quiet
+              until you search, then hands off to the dedicated search page.
+            </p>
+          </div>
 
-      <div className="content-grid home-content">
-        <div className="main-column">
-          <SearchPanel
-            filters={filters}
-            results={results}
-            onFilterChange={handleFilterChange}
-            onResetFilters={handleResetFilters}
-          />
-          <KnowledgeGraph
-            graph={graph}
-            selectedCenterId={selectedCenterId}
-            depth={graphDepth}
-            onDepthChange={setGraphDepth}
-          />
-          <TimelinePanel timeline={timeline} />
-        </div>
-      </div>
+          <div className="home-search-form">
+            <SearchControls
+              query={query}
+              filters={filters}
+              onQueryChange={setQuery}
+              onFilterChange={handleFilterChange}
+              onReset={handleReset}
+              onSubmit={() => router.push(searchHref as Route)}
+            />
+            <p className="home-search-note">
+              No wiki cards are shown here before search. Use the controls above to move
+              into the search page.
+            </p>
+          </div>
+        </section>
 
-      <footer className="home-footer">
-        <p className="home-footer-count">
-          <span className="home-footer-count-label">Results in view</span>
-          <span className="home-footer-count-value">{results.length}</span>
-        </p>
-        <p className="home-footer-legal">
-          <a href="#">Terms</a>
-          <span aria-hidden> · </span>
-          <a href="#">Privacy</a>
-          <span aria-hidden> · </span>
-          <a href="#">Acceptable use</a>
-        </p>
-      </footer>
+        <section className="home-section home-preview-section">
+          <div className="home-section-copy">
+            <p className="eyebrow">Graph preview</p>
+            <h2>See the connection field before opening the full graph.</h2>
+            <p>
+              This preview stays compact and draggable. Tap the graph to move into the
+              full graph-centered page.
+            </p>
+          </div>
+
+          <div className="home-preview-stage">
+            <GraphCanvas
+              graph={previewGraph}
+              selectedCenterId={selectedCenterId}
+              showControls={false}
+              showRelationFilters={false}
+              previewHref={graphHref}
+              className="preview-graph-canvas"
+              emptyMessage="Graph preview will appear here."
+            />
+          </div>
+        </section>
+
+        <section className="home-section home-preview-section" id="section-timeline">
+          <div className="home-section-copy">
+            <p className="eyebrow">Timeline preview</p>
+            <h2>Browse the chronology as a horizontal line of linked entries.</h2>
+            <p>
+              Pan and zoom freely here (see hints under the chart). Open the full timeline
+              anytime — no search required.
+            </p>
+            <p className="home-timeline-actions">
+              <Link href={timelineHref as Route} className="home-timeline-open-link">
+                Open full timeline
+              </Link>
+              <Link href="/timeline" className="home-timeline-open-link home-timeline-open-link-secondary">
+                Timeline home
+              </Link>
+            </p>
+          </div>
+
+          <div className="home-preview-stage">
+            <HorizontalTimeline
+              items={previewTimelineItems}
+              focusedSlug={selectedSlug}
+              previewHref={timelineHref}
+              className="preview-timeline"
+              emptyMessage="Timeline preview will appear here."
+            />
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

@@ -73,6 +73,7 @@ export interface TimelineItem {
   title: string;
   type: EntryType;
   area: string;
+  historical_start_year: number;
   period_label?: string | null;
   summary: string;
 }
@@ -88,4 +89,3 @@ export interface QueryFilters {
   from: string;
   to: string;
 }
-

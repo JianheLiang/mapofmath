@@ -11,8 +11,7 @@ export function HomeHero({ query, onQueryChange }: HomeHeroProps) {
       <div className="home-starfield" aria-hidden />
       <div className="home-hero-inner">
         <h1 className="home-brand">
-          <span className="home-brand-serif">map of math</span>
-          <span className="home-brand-version">v0.1</span>
+          <span className="home-brand-serif">Map of math</span>
         </h1>
 
         <form
@@ -46,11 +45,11 @@ export function HomeHero({ query, onQueryChange }: HomeHeroProps) {
         </form>
 
         <nav className="home-explore-links" aria-label="Explore sections">
-          <a href="#section-graph">explore connection</a>
+          <a href="#section-graph">Explore links</a>
           <span className="home-explore-dot" aria-hidden>
             ·
           </span>
-          <a href="#section-timeline">explore timeline</a>
+          <a href="#section-timeline">Explore timeline</a>
         </nav>
       </div>
     </div>

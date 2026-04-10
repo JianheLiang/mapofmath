@@ -25,8 +25,17 @@ class ContentService:
         subarea: Optional[str] = None,
         year_from: Optional[int] = None,
         year_to: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> List[SearchResult]:
-        return self._repository.search(query, entry_type, area, subarea, year_from, year_to)
+        return self._repository.search(
+            query,
+            entry_type,
+            area,
+            subarea,
+            year_from,
+            year_to,
+            limit,
+        )
 
     def get_wiki(self, slug: str) -> Optional[WikiDetail]:
         return self._repository.get_by_slug(slug)
@@ -36,8 +45,14 @@ class ContentService:
         center_id: Optional[str] = None,
         depth: int = 1,
         area: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> GraphPayload:
-        return self._repository.get_graph(center_id=center_id, depth=depth, area=area)
+        return self._repository.get_graph(
+            center_id=center_id,
+            depth=depth,
+            area=area,
+            limit=limit,
+        )
 
     def get_timeline(
         self,

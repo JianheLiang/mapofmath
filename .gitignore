@@ -6,9 +6,10 @@ backend/.coverage
 backend/htmlcov/
 frontend/.next/
 frontend/node_modules/
+.codex-runtime/
+.cursor/
 *.pyc
 *.pyo
 *.pyd
 .DS_Store
 Thumbs.db
-

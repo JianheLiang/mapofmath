@@ -35,6 +35,7 @@ class InMemoryWikiRepository(WikiRepository):
         subarea: Optional[str] = None,
         year_from: Optional[int] = None,
         year_to: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> List[SearchResult]:
         matches: List[SearchResult] = []
         needle = query.strip().lower()
@@ -70,7 +71,8 @@ class InMemoryWikiRepository(WikiRepository):
                 )
             )
 
-        return sorted(matches, key=lambda item: (item.historical_start_year, item.title))
+        ordered = sorted(matches, key=lambda item: (item.historical_start_year, item.title))
+        return ordered[:limit] if limit else ordered
 
     def get_by_slug(self, slug: str) -> Optional[WikiDetail]:
         entry = self._entries_by_slug.get(slug)
@@ -115,11 +117,17 @@ class InMemoryWikiRepository(WikiRepository):
         center_id: Optional[str] = None,
         depth: int = 1,
         area: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> GraphPayload:
-        selected_slugs = self._select_graph_slugs(center_id=center_id, depth=depth, area=area)
+        selected_slugs = self._select_graph_slugs(
+            center_id=center_id,
+            depth=depth,
+            area=area,
+            limit=limit,
+        )
         nodes: List[GraphNode] = []
         edges: List[GraphEdge] = []
-        selected_entries = [self._entries_by_slug[slug] for slug in sorted(selected_slugs)]
+        selected_entries = [self._entries_by_slug[slug] for slug in selected_slugs]
         selected_lookup = {entry.slug: entry for entry in selected_entries}
 
         areas = sorted({entry.area for entry in selected_entries})
@@ -200,6 +208,7 @@ class InMemoryWikiRepository(WikiRepository):
                     title=entry.title,
                     type=entry.type,
                     area=entry.area,
+                    historical_start_year=entry.historical_start_year,
                     period_label=entry.period_label,
                     summary=entry.summary,
                 )
@@ -219,22 +228,28 @@ class InMemoryWikiRepository(WikiRepository):
         center_id: Optional[str],
         depth: int,
         area: Optional[str],
-    ) -> Set[str]:
+        limit: Optional[int],
+    ) -> List[str]:
         if not self._entries_by_slug:
-            return set()
+            return []
 
         if not center_id:
-            return {
-                entry.slug
+            entries = [
+                entry
                 for entry in self._entries_by_slug.values()
                 if not area or matches_area_filter(entry.area, entry.subarea, area)
-            }
+            ]
+            entries.sort(key=lambda item: (item.historical_start_year, item.title))
+            if limit:
+                entries = entries[:limit]
+            return [entry.slug for entry in entries]
 
         center = self._entries_by_id.get(center_id)
         if not center:
-            return set()
+            return []
 
         discovered: Set[str] = set()
+        ordered: List[str] = []
         queue = deque([(center.slug, 0)])
 
         while queue:
@@ -242,6 +257,7 @@ class InMemoryWikiRepository(WikiRepository):
             if slug in discovered:
                 continue
             discovered.add(slug)
+            ordered.append(slug)
             if level >= depth:
                 continue
 
@@ -250,18 +266,20 @@ class InMemoryWikiRepository(WikiRepository):
             for candidate in self._entries_by_slug.values():
                 if any(relation.target_slug == slug for relation in candidate.relations):
                     neighbors.add(candidate.slug)
-            for neighbor_slug in neighbors:
+            for neighbor_slug in sorted(neighbors):
                 if neighbor_slug in self._entries_by_slug:
                     queue.append((neighbor_slug, level + 1))
 
         if area:
-            return {
+            ordered = [
                 slug
-                for slug in discovered
+                for slug in ordered
                 if matches_area_filter(
                     self._entries_by_slug[slug].area,
                     self._entries_by_slug[slug].subarea,
                     area,
                 )
-            }
-        return discovered
+            ]
+        if limit:
+            ordered = ordered[:limit]
+        return ordered

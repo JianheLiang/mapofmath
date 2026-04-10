@@ -53,6 +53,21 @@ class ApiTests(unittest.TestCase):
         self.assertTrue(any(node["type"] == "area" for node in payload["nodes"]))
         self.assertTrue(any(edge["relation_type"] == "belongs_to_area" for edge in payload["edges"]))
 
+    def test_search_limit_is_applied(self) -> None:
+        response = self.client.get("/api/search", params={"limit": 2})
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(len(payload), 2)
+
+    def test_graph_limit_caps_non_area_nodes(self) -> None:
+        response = self.client.get("/api/graph", params={"depth": 2, "limit": 3})
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        non_area_nodes = [node for node in payload["nodes"] if node["type"] != "area"]
+        self.assertLessEqual(len(non_area_nodes), 3)
+
     def test_timeline_orders_entries_chronologically(self) -> None:
         response = self.client.get("/api/timeline", params={"area": "calculus"})
 
@@ -60,6 +75,13 @@ class ApiTests(unittest.TestCase):
         payload = response.json()
         years = [group["year"] for group in payload]
         self.assertEqual(years, sorted(years))
+        self.assertTrue(
+            all(
+                item["historical_start_year"] == group["year"]
+                for group in payload
+                for item in group["items"]
+            )
+        )
 
     def test_cors_header_present_for_frontend_origin(self) -> None:
         response = self.client.get(

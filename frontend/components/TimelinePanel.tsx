@@ -1,3 +1,4 @@
+import type { Route } from "next";
 import Link from "next/link";
 
 import { TimelineGroup } from "@/lib/types";
@@ -33,7 +34,7 @@ export function TimelinePanel({ timeline }: TimelinePanelProps) {
                 {group.items.map((item) => (
                   <Link
                     key={item.slug}
-                    href={`/wiki/${item.slug}`}
+                    href={`/wiki/${item.slug}` as Route}
                     className="timeline-item timeline-item-link"
                   >
                     <span className={`type-pill type-${item.type}`}>{item.type}</span>
@@ -50,4 +51,3 @@ export function TimelinePanel({ timeline }: TimelinePanelProps) {
     </section>
   );
 }
-

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -28,25 +29,42 @@ const relationLabels: Record<RelationType, string> = {
   influenced_by: "influenced by",
 };
 
+/** Softer, readable edge colors (still distinct). */
 const relationColors: Record<RelationType, string> = {
-  defines_with: "#1f7a63",
-  used_in_proof: "#d1495b",
-  related_to: "#5f6b7a",
-  worked_on: "#2f5d9f",
-  belongs_to_area: "#c08a2b",
-  influenced_by: "#7c5ea6",
+  defines_with: "#5ec4a8",
+  used_in_proof: "#e8939f",
+  related_to: "#9aa3b2",
+  worked_on: "#7eb0e8",
+  belongs_to_area: "#d4b896",
+  influenced_by: "#c4a8e0",
 };
 
+/** Stable pastel fill + border for an area name (soft, not strict blocks). */
+function areaTheme(area: string): { fill: string; border: string; label: string } {
+  let h = 0;
+  for (let i = 0; i < area.length; i++) {
+    h = (h * 31 + area.charCodeAt(i)) >>> 0;
+  }
+  const hue = h % 360;
+  return {
+    fill: `hsla(${hue}, 42%, 78%, 0.28)`,
+    border: `hsla(${hue}, 35%, 58%, 0.42)`,
+    label: `hsla(${hue}, 18%, 88%, 0.95)`,
+  };
+}
+
 function buildLayout(layoutMode: LayoutMode, compactMode: boolean) {
+  const spacious = !compactMode;
+
   if (layoutMode === "hierarchy") {
     return {
       name: "dagre",
       rankDir: "LR",
-      rankSep: compactMode ? 80 : 120,
-      nodeSep: compactMode ? 20 : 40,
-      edgeSep: compactMode ? 8 : 18,
+      rankSep: spacious ? 160 : 100,
+      nodeSep: spacious ? 56 : 32,
+      edgeSep: spacious ? 24 : 14,
       fit: true,
-      padding: 24,
+      padding: spacious ? 56 : 32,
       animate: false,
     };
   }
@@ -55,9 +73,9 @@ function buildLayout(layoutMode: LayoutMode, compactMode: boolean) {
     return {
       name: "concentric",
       fit: true,
-      padding: 28,
+      padding: spacious ? 56 : 36,
       animate: false,
-      spacingFactor: compactMode ? 0.75 : 1,
+      spacingFactor: spacious ? 1.35 : 0.88,
       concentric: (node: cytoscape.NodeSingular) => {
         if (node.data("type") === "area") {
           return 5;
@@ -77,13 +95,14 @@ function buildLayout(layoutMode: LayoutMode, compactMode: boolean) {
   return {
     name: "cose",
     fit: true,
-    padding: 24,
+    padding: spacious ? 64 : 40,
     animate: false,
     randomize: false,
-    idealEdgeLength: compactMode ? 100 : 160,
-    nodeRepulsion: compactMode ? 320000 : 480000,
-    gravity: compactMode ? 0.4 : 0.25,
-    componentSpacing: compactMode ? 40 : 80,
+    idealEdgeLength: spacious ? 240 : 130,
+    nodeRepulsion: spacious ? 1_200_000 : 520_000,
+    gravity: spacious ? 0.12 : 0.32,
+    componentSpacing: spacious ? 160 : 72,
+    nestingFactor: 0.8,
   };
 }
 
@@ -97,7 +116,8 @@ export function KnowledgeGraph({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
   const [layoutMode, setLayoutMode] = useState<LayoutMode>("force");
-  const [compactMode, setCompactMode] = useState(true);
+  /** When false, layout uses more spacing and larger labels (default: readable). */
+  const [compactMode, setCompactMode] = useState(false);
   const [activeRelations, setActiveRelations] = useState<Record<RelationType, boolean>>({
     defines_with: true,
     used_in_proof: true,
@@ -147,12 +167,16 @@ export function KnowledgeGraph({
     filteredGraph.nodes
       .filter((node) => node.type === "area")
       .forEach((node) => {
+        const theme = areaTheme(node.area);
         elements.push({
           data: {
             id: node.id,
             label: node.title,
             type: node.type,
             area: node.area,
+            areaFill: theme.fill,
+            areaBorder: theme.border,
+            areaLabelColor: theme.label,
           },
           classes: "area-compound",
         });
@@ -196,72 +220,77 @@ export function KnowledgeGraph({
           style: {
             label: "data(label)",
             "font-family": "Source Sans 3, Segoe UI, sans-serif",
-            "font-size": 11,
-            color: "#e8eaed",
+            "font-size": compactMode ? 11 : 13,
+            color: "#f0f3f8",
             "text-wrap": "wrap",
-            "text-max-width": 120,
+            "text-max-width": compactMode ? 120 : 168,
             "text-valign": "bottom",
-            "text-margin-y": 9,
+            "text-margin-y": compactMode ? 8 : 12,
+            "text-outline-width": compactMode ? 1.5 : 2,
+            "text-outline-color": "#0c0c0e",
+            "text-outline-opacity": 0.92,
             "overlay-opacity": 0,
           },
         },
         {
           selector: 'node[type = "concept"]',
           style: {
-            width: compactMode ? 26 : 34,
-            height: compactMode ? 26 : 34,
-            "background-color": "#1f7a63",
-            "border-width": 2,
-            "border-color": "#1a1a1a",
+            width: compactMode ? 28 : 36,
+            height: compactMode ? 28 : 36,
+            "background-color": "#3d9a82",
+            "border-width": compactMode ? 2 : 2.5,
+            "border-color": "rgba(255, 255, 255, 0.22)",
           },
         },
         {
           selector: 'node[type = "theorem"]',
           style: {
-            width: compactMode ? 28 : 36,
-            height: compactMode ? 28 : 36,
-            "background-color": "#d1495b",
+            width: compactMode ? 30 : 38,
+            height: compactMode ? 30 : 38,
+            "background-color": "#d96678",
             shape: "round-rectangle",
-            "border-width": 2,
-            "border-color": "#1a1a1a",
+            "border-width": compactMode ? 2 : 2.5,
+            "border-color": "rgba(255, 255, 255, 0.22)",
           },
         },
         {
           selector: 'node[type = "mathematician"]',
           style: {
-            width: compactMode ? 24 : 32,
-            height: compactMode ? 24 : 32,
-            "background-color": "#2f5d9f",
+            width: compactMode ? 26 : 34,
+            height: compactMode ? 26 : 34,
+            "background-color": "#4a7fc4",
             shape: "diamond",
-            "border-width": 2,
-            "border-color": "#1a1a1a",
+            "border-width": compactMode ? 2 : 2.5,
+            "border-color": "rgba(255, 255, 255, 0.22)",
           },
         },
         {
           selector: 'node[type = "area"]',
           style: {
-            "background-color": "rgba(255, 255, 255, 0.04)",
-            "border-width": 1.5,
-            "border-color": "rgba(255, 255, 255, 0.12)",
-            shape: "round-rectangle",
-            padding: compactMode ? 14 : 22,
+            "background-color": "data(areaFill)",
+            "border-width": compactMode ? 1.5 : 2,
+            "border-color": "data(areaBorder)",
+            shape: "ellipse",
+            padding: compactMode ? 22 : 36,
             "text-halign": "center",
             "text-valign": "top",
-            "text-margin-y": -8,
-            color: "#c9ccd1",
-            "font-size": 13,
+            "text-margin-y": -10,
+            color: "data(areaLabelColor)",
+            "font-size": compactMode ? 12 : 13,
+            "font-weight": 500,
+            "text-outline-width": 0,
           },
         },
         {
           selector: "edge",
           style: {
-            width: 1.6,
-            "line-color": "#4a4d55",
+            width: compactMode ? 1.8 : 2.4,
+            "line-color": "#6b7280",
             "curve-style": "bezier",
-            opacity: 0.65,
+            opacity: 0.88,
             "target-arrow-shape": "triangle",
             "target-arrow-color": "data(color)",
-            "arrow-scale": 0.7,
+            "arrow-scale": compactMode ? 0.75 : 0.85,
           },
         },
         {
@@ -298,7 +327,8 @@ export function KnowledgeGraph({
             "line-style": "dashed",
             "line-color": relationColors.belongs_to_area,
             "target-arrow-color": relationColors.belongs_to_area,
-            opacity: 0.2,
+            width: compactMode ? 1.2 : 1.6,
+            opacity: 0.35,
           },
         },
         {
@@ -332,9 +362,9 @@ export function KnowledgeGraph({
           },
         },
       ] as any,
-      wheelSensitivity: 0.16,
-      minZoom: 0.45,
-      maxZoom: 2.4,
+      wheelSensitivity: 0.14,
+      minZoom: 0.35,
+      maxZoom: 2.6,
     });
 
     cyRef.current = cy;
@@ -346,7 +376,7 @@ export function KnowledgeGraph({
       }
       const slug = node.data("slug") as string;
       if (slug) {
-        router.push(`/wiki/${slug}`);
+        router.push(`/wiki/${slug}` as Route);
       }
     });
 
@@ -399,9 +429,9 @@ export function KnowledgeGraph({
         cy.animate({
           fit: {
             eles: neighborhood,
-            padding: 48,
+            padding: 72,
           },
-          duration: 250,
+          duration: 280,
         });
       }
     }
@@ -424,9 +454,8 @@ export function KnowledgeGraph({
         <div>
           <h2>Explore the knowledge graph</h2>
           <p>
-            This explorer takes cues from Juggl’s layout-driven graph navigation and
-            Extended Graph’s focus/filter workflow, adapted to this site’s compact atlas
-            style.
+            Areas are soft clusters; thicker lines show how entries connect. Toggle
+            relation types or use compact layout if you need a denser view.
           </p>
         </div>
       </div>
@@ -463,8 +492,9 @@ export function KnowledgeGraph({
             type="button"
             className={`secondary-button ${compactMode ? "is-active" : ""}`}
             onClick={() => setCompactMode((current) => !current)}
+            title="Tighter layout and smaller labels"
           >
-            {compactMode ? "Compact on" : "Compact off"}
+            {compactMode ? "Compact" : "Spacious"}
           </button>
           <div className="graph-stats">
             <span>{visibleNodeCount} nodes</span>

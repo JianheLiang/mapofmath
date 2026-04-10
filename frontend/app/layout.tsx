@@ -1,4 +1,6 @@
 import "./globals.css";
+import "katex/dist/katex.min.css";
+import "vis-timeline/styles/vis-timeline-graph2d.min.css";
 
 import type { Metadata } from "next";
 import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
@@ -31,4 +33,3 @@ export default function RootLayout({
     </html>
   );
 }
-

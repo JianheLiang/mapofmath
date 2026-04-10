@@ -1,9 +1,11 @@
+import type { Route } from "next";
 import Link from "next/link";
 
 import { QueryFilters, SearchResult } from "@/lib/types";
 
 interface SearchPanelProps {
   filters: QueryFilters;
+  hasActiveSearch: boolean;
   results: SearchResult[];
   onFilterChange: (key: keyof QueryFilters, value: string) => void;
   onResetFilters: () => void;
@@ -11,6 +13,7 @@ interface SearchPanelProps {
 
 export function SearchPanel({
   filters,
+  hasActiveSearch,
   results,
   onFilterChange,
   onResetFilters,
@@ -23,7 +26,8 @@ export function SearchPanel({
           <h2>Refine and open entries</h2>
           <p>
             Use the search bar above to query the wiki. Filters narrow type, area, and
-            time range. Each result opens the full article.
+            time range. The graph and timeline below load immediately; matching entries
+            appear here when you search or filter.
           </p>
         </div>
       </div>
@@ -82,7 +86,11 @@ export function SearchPanel({
       </div>
 
       <div className="search-results">
-        {results.length === 0 ? (
+        {!hasActiveSearch ? (
+          <div className="empty-state">
+            <p>Enter a keyword or adjust filters to list matching articles here.</p>
+          </div>
+        ) : results.length === 0 ? (
           <div className="empty-state">
             <p>No entries match the current filters.</p>
           </div>
@@ -90,7 +98,7 @@ export function SearchPanel({
           results.map((result) => (
             <Link
               key={result.slug}
-              href={`/wiki/${result.slug}`}
+              href={`/wiki/${result.slug}` as Route}
               className="search-result search-result-link"
             >
               <div>

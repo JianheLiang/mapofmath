@@ -1,7 +1,6 @@
-import Link from "next/link";
-
 import { WikiArticleView } from "@/components/WikiArticleView";
-import { getWiki } from "@/lib/api";
+import { getTimeline, getWiki } from "@/lib/api";
+import { buildLocalTimelineWindow } from "@/lib/timeline";
 
 export default async function WikiPage({
   params,
@@ -9,23 +8,15 @@ export default async function WikiPage({
   params: { slug: string };
 }) {
   const entry = await getWiki(params.slug);
+  const areaTimeline = await getTimeline({
+    type: "",
+    area: entry.area,
+    from: "",
+    to: "",
+  });
+  const localTimeline = buildLocalTimelineWindow(areaTimeline, entry.slug, 5);
 
   return (
-    <div className="wiki-layout">
-      <header className="wiki-topbar">
-        <Link href="/" className="wiki-topbar-brand">
-          <span className="wiki-topbar-serif">map of math</span>
-          <span className="wiki-topbar-version">v0.1</span>
-        </Link>
-        <div className="wiki-topbar-actions">
-          <Link href="/#section-search" className="wiki-topbar-pill">
-            Search
-          </Link>
-        </div>
-      </header>
-      <main className="wiki-page">
-        <WikiArticleView entry={entry} />
-      </main>
-    </div>
+    <WikiArticleView entry={entry} timelineItems={localTimeline} />
   );
 }

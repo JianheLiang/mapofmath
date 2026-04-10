@@ -54,10 +54,13 @@ uvicorn backend.app.main:app --reload
 ```powershell
 cd frontend
 npm install
-npm run dev
+npm run serve:local
 ```
 
 Set `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000`.
+
+This project has been most stable locally when the frontend is run from a clean production build with `npm run serve:local`.
+If you want hot reload for frontend development, `npm run dev` is still available, but clearing `frontend/.next` may be necessary if the dev bundler gets into a bad state.
 
 ## API Surface
 
@@ -99,3 +102,4 @@ To refresh the seed dataset through the API:
 ```powershell
 Invoke-WebRequest -Method Post -Uri "http://127.0.0.1:8000/api/ingest/wikipedia?limit=100"
 ```
+

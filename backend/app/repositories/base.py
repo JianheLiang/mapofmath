@@ -20,6 +20,7 @@ class WikiRepository(ABC):
         subarea: Optional[str] = None,
         year_from: Optional[int] = None,
         year_to: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> List[SearchResult]:
         raise NotImplementedError
 
@@ -33,6 +34,7 @@ class WikiRepository(ABC):
         center_id: Optional[str] = None,
         depth: int = 1,
         area: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> GraphPayload:
         raise NotImplementedError
 

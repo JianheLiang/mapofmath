@@ -94,6 +94,7 @@ class Neo4jWikiRepository(WikiRepository):
         subarea: Optional[str] = None,
         year_from: Optional[int] = None,
         year_to: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> List[SearchResult]:
         cypher = """
         MATCH (e:WikiEntry)
@@ -123,7 +124,8 @@ class Neo4jWikiRepository(WikiRepository):
                     "year_to": year_to,
                 },
             )
-            return [self._search_result_from_node(record["e"]) for record in records]
+            results = [self._search_result_from_node(record["e"]) for record in records]
+            return results[:limit] if limit else results
 
     def get_by_slug(self, slug: str) -> Optional[WikiDetail]:
         with self._driver.session() as session:
@@ -208,8 +210,11 @@ class Neo4jWikiRepository(WikiRepository):
         center_id: Optional[str] = None,
         depth: int = 1,
         area: Optional[str] = None,
+        limit: Optional[int] = None,
     ) -> GraphPayload:
         entry_ids = self._select_entry_ids(center_id=center_id, depth=depth, area=area)
+        if limit:
+            entry_ids = entry_ids[:limit]
         if not entry_ids:
             return GraphPayload(center_id=center_id, nodes=[], edges=[])
 
@@ -324,6 +329,7 @@ class Neo4jWikiRepository(WikiRepository):
                         title=node["title"],
                         type=node["type"],
                         area=node["area"],
+                        historical_start_year=node["historical_start_year"],
                         period_label=node.get("period_label"),
                         summary=node["summary"],
                     )

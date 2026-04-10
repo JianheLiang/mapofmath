@@ -71,6 +71,7 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
         subarea: Optional[str] = None,
         year_from: Optional[int] = Query(None, alias="from"),
         year_to: Optional[int] = Query(None, alias="to"),
+        limit: Optional[int] = Query(None, ge=1, le=100),
     ):
         service: ContentService = request.app.state.content_service
         return service.search(
@@ -80,6 +81,7 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
             subarea=subarea,
             year_from=year_from,
             year_to=year_to,
+            limit=limit,
         )
 
     @app.get("/api/wiki/{slug}")
@@ -96,9 +98,10 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
         center: Optional[str] = None,
         depth: int = Query(1, ge=1, le=4),
         area: Optional[str] = None,
+        limit: Optional[int] = Query(None, ge=1, le=100),
     ):
         service: ContentService = request.app.state.content_service
-        return service.get_graph(center_id=center, depth=depth, area=area)
+        return service.get_graph(center_id=center, depth=depth, area=area, limit=limit)
 
     @app.get("/api/timeline")
     def get_timeline(

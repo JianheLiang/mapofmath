@@ -123,6 +123,7 @@ class TimelineItem(BaseModel):
     title: str
     type: EntryType
     area: str
+    historical_start_year: int
     period_label: Optional[str] = None
     summary: str
 

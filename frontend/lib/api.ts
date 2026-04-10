@@ -22,6 +22,7 @@ function buildQuery(params: Record<string, string | undefined>) {
 export async function searchEntries(
   query: string,
   filters: QueryFilters,
+  options?: { limit?: number },
 ): Promise<SearchResult[]> {
   const qs = buildQuery({
     q: query,
@@ -29,6 +30,7 @@ export async function searchEntries(
     area: filters.area || undefined,
     from: filters.from || undefined,
     to: filters.to || undefined,
+    limit: options?.limit ? String(options.limit) : undefined,
   });
   const response = await fetch(`${API_BASE_URL}/api/search?${qs}`, {
     cache: "no-store",
@@ -53,11 +55,13 @@ export async function getGraph(
   centerId: string | null,
   depth: number,
   area: string,
+  options?: { limit?: number },
 ): Promise<GraphPayload> {
   const qs = buildQuery({
     center: centerId || undefined,
     depth: String(depth),
     area: area || undefined,
+    limit: options?.limit ? String(options.limit) : undefined,
   });
   const response = await fetch(`${API_BASE_URL}/api/graph?${qs}`, {
     cache: "no-store",
